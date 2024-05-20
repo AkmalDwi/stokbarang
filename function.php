@@ -72,6 +72,7 @@ if($stocksekarang >= $qty){
     </script>
     ';
 }
+}
 
 //update info barang
 if(isset($_POST['updatebarang'])){
@@ -147,24 +148,26 @@ if(isset($_POST['updatebarangmasuk'])){
 //Menghapus barang masuk
 if(isset($_POST['hapusbarangmasuk'])){ 
     $idb = $_POST['idb'];
-    $qty = $_POST['kty'];
+    $qty = $_POST['qty'];
     $idm = $_POST['idm'];
-  
-    $getdatastock = mysqli_query($conn, "select * from stock where idbarang='$idb'");
+
+    $getdatastock = mysqli_query($conn, "SELECT * FROM stock WHERE idbarang='$idb'");
     $data = mysqli_fetch_array($getdatastock);
     $stok = $data['stock'];
-  
+
     $selisih = $stok - $qty;
 
-    $update = mysqli_query($conn, "update stock set stock='$selisih' where idbarang='$idb'");
-    $hapusdata = mysqli_query($conn, "delete from masuk where idmasuk='$idm'"); 
-  
-    if ($update&&$hapusdata) { 
-        header('location:masuk.php');
+    $update = mysqli_query($conn, "UPDATE stock SET stock='$selisih' WHERE idbarang='$idb'");
+    $hapusdata = mysqli_query($conn, "DELETE FROM masuk WHERE idmasuk='$idm'"); 
+
+    if ($update && $hapusdata) { 
+        header('Location: masuk.php');
+        exit();
     } else {
-        header('location:masuk.php'); 
+        echo 'Gagal menghapus barang masuk. Error: ' . mysqli_error($conn);
     }
-  }
+}
+
 
 
 
@@ -230,7 +233,7 @@ if(isset($_POST['hapusbarangkeluar'])){
         header('location:keluar.php'); 
     }
   }
-}
+
 
 //menambah admin
 if(isset($_POST['addadmin'])){
@@ -276,6 +279,5 @@ if(isset($_POST['hapusadmin'])){
     else{
         header('location:admin.php');
     }
-}
-    
+}  
 ?>
